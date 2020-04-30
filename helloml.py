@@ -76,30 +76,38 @@ def load_data():
   test_set=np.arange(test_set_size*num_samples)
   test_set=test_set.reshape(test_set_size,num_samples)
   test_set=test_set.astype('float32')
-
+  url = "https://raw.githubusercontent.com/Cloudspindle/helloml/master/ClockwiseZero_accel.200.csv"
   # load clockwise gesture ClockwiseZero_accel.200.csv as first training example
-  uploaded = files.upload()
-  filename=next(iter(uploaded))
+
+  #uploaded = files.upload()
+  #filename=next(iter(uploaded))
   headers = ['ts', 'x', 'y', 'z','m'] 
-  data=pd.read_csv(filename,sep=',',names=headers,header=None,parse_dates=True,index_col=0,infer_datetime_format=True )
+#  data=pd.read_csv(filename,sep=',',names=headers,header=None,parse_dates=True,index_col=0,infer_datetime_format=True )
+  data=pd.read_csv(url,sep=',',names=headers,header=None,parse_dates=True,index_col=0,infer_datetime_format=True )
   
+  url =  "https://raw.githubusercontent.com/Cloudspindle/helloml/master/AntiClockwiseZero_accel.200.csv"
   # load the anticlockwise gesture AntiClockwiseZero_accel.200.csv as the second training example
-  uploaded = files.upload()
-  filename=next(iter(uploaded))
-  anti_data=pd.read_csv(filename,sep=',',names=headers,header=None,parse_dates=True,index_col=0,infer_datetime_format=True )
+  #uploaded = files.upload()
+  #filename=next(iter(uploaded))
+  #anti_data=pd.read_csv(filename,sep=',',names=headers,header=None,parse_dates=True,index_col=0,infer_datetime_format=True )
+  anti_data=pd.read_csv(url,sep=',',names=headers,header=None,parse_dates=True,index_col=0,infer_datetime_format=True )
   anti_clock_y=anti_data.y.to_numpy()
   clock_y=data.y.to_numpy()
 
+  url = "https://raw.githubusercontent.com/Cloudspindle/helloml/master/ChloeClockwise_accel.200.csv"
   # upload the data from the file ChloeClockwise_accel.200.csv - real test data
-  uploaded = files.upload()
-  filename=next(iter(uploaded))
-  test_clock_data=pd.read_csv(filename,sep=',',names=headers,header=None,parse_dates=True,index_col=0,infer_datetime_format=True )
+  # uploaded = files.upload()
+  # filename=next(iter(uploaded))
+  #test_clock_data=pd.read_csv(filename,sep=',',names=headers,header=None,parse_dates=True,index_col=0,infer_datetime_format=True )
+  test_clock_data=pd.read_csv(url,sep=',',names=headers,header=None,parse_dates=True,index_col=0,infer_datetime_format=True )
   test_clock_y=test_clock_data.y.to_numpy()
 
+  url = "https://raw.githubusercontent.com/Cloudspindle/helloml/master/ChloeAntiClock_accel.200.csv"
   # upload the dat from the file ChloeAntiClock_accel.200.csv file - real test data
-  uploaded = files.upload()
-  filename=next(iter(uploaded))
-  test_anti_clock_data=pd.read_csv(filename,sep=',',names=headers,header=None,parse_dates=True,index_col=0,infer_datetime_format=True )
+  # uploaded = files.upload()
+  # filename=next(iter(uploaded))
+  # test_anti_clock_data=pd.read_csv(filename,sep=',',names=headers,header=None,parse_dates=True,index_col=0,infer_datetime_format=True )
+  test_anti_clock_data=pd.read_csv(url,sep=',',names=headers,header=None,parse_dates=True,index_col=0,infer_datetime_format=True )
   test_anti_clock_y=test_anti_clock_data.y.to_numpy()
 
 
