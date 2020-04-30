@@ -134,7 +134,7 @@ def train_neural_net(net,training_cycles):
 
 def test_neural_net():
   global input_set,output_set,test_set
-  
+  global net
   plt.figure(figsize=(10,5))
   plt.plot(test_set[0])
   plt.plot(test_set[1])
