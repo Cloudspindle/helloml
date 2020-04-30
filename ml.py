@@ -26,6 +26,7 @@ num_outputs=2
 training_cycles=100
 
 def ml_init():
+  global input_set,output_set,test_set
 
   input_set=np.arange(input_set_size*num_samples)
   input_set=input_set.reshape(input_set_size,num_samples)
