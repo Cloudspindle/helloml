@@ -25,10 +25,10 @@ num_hidden=512
 num_outputs=2
 training_cycles=100
 
-def ml_init():
+def init():
   global input_set,output_set,test_set
   global input_set_size,test_set_size,num_samples 
-  
+
   input_set=np.arange(input_set_size*num_samples)
   input_set=input_set.reshape(input_set_size,num_samples)
   input_set=input_set.astype('float32')
