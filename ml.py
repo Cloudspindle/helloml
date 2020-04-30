@@ -25,7 +25,7 @@ num_hidden=512
 num_outputs=2
 training_cycles=100
 
-def load_data():
+def ml_init():
 
   input_set=np.arange(input_set_size*num_samples)
   input_set=input_set.reshape(input_set_size,num_samples)
@@ -37,6 +37,11 @@ def load_data():
   test_set=np.arange(test_set_size*num_samples)
   test_set=test_set.reshape(test_set_size,num_samples)
   test_set=test_set.astype('float32')
+
+
+def load_data():
+  global input_set,output_set,test_set
+  
   url = "https://raw.githubusercontent.com/Cloudspindle/helloml/master/ClockwiseZero_accel.200.csv"
   # load clockwise gesture ClockwiseZero_accel.200.csv as first training example
 
@@ -97,6 +102,8 @@ def load_data():
   return input_set,output_set,test_set
 
 def show_input_example():
+   global input_set,output_set,test_set
+
   random_selection=round(random.uniform(0, input_set_size))
   print(random_selection)
   print(random_selection%2)
@@ -106,6 +113,8 @@ def show_input_example():
   plt.show()
 
 def define_neural_net(num_inputs,num_hidden_nodes,num_outputs):
+  global input_set,output_set,test_set
+
   net = tf.keras.Sequential()
   net.add(tf.keras.layers.Dense(num_hidden_nodes, activation='sigmoid', input_shape=(num_inputs,)))
   net.add(tf.keras.layers.Dense(num_outputs, activation='softmax'))
@@ -114,12 +123,16 @@ def define_neural_net(num_inputs,num_hidden_nodes,num_outputs):
   return net
 
 def train_neural_net(net,training_cycles):
+  global input_set,output_set,test_set
+  
   log=net.fit(input_set, output_set, epochs=training_cycles)
   loss = log.history['loss']
   epochs = range(1,len(loss)+1)
   plt.plot(epochs,loss,'g.',label='Training loss')
 
 def test_neural_net():
+  global input_set,output_set,test_set
+  
   plt.figure(figsize=(10,5))
   plt.plot(test_set[0])
   plt.plot(test_set[1])
