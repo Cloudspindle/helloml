@@ -104,7 +104,7 @@ def load_data():
   return input_set,output_set,test_set
 
 def show_input_example():
-   global input_set,output_set,test_set
+  global input_set,output_set,test_set
 
   random_selection=round(random.uniform(0, input_set_size))
   print(random_selection)
