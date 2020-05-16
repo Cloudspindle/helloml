@@ -7,8 +7,8 @@
 #  Permission is hereby granted to use this software freely under the terms of
 #  the free bsd license: https://www.freebsd.org/copyright/freebsd-license.html
 #--------------------------------------------------------------------------------
-!git clone https://github.com/Cloudspindle/helloml.git
-from helloml.ml import init,load_data,show_input_example,define_neural_net,show_input_example,define_neural_net,train_neural_net,test_neural_net
+#!git clone https://github.com/Cloudspindle/helloml.git
+from ml import init,load_data,show_input_example,define_neural_net,show_input_example,define_neural_net,train_neural_net,test_neural_net
 input_set_size=100
 test_set_size=2
 num_samples=200               # 200 samples are in the motion examples
@@ -26,4 +26,4 @@ show_input_example() #show an example of the data (input training v test) - reru
 net=define_neural_net(num_inputs,num_hidden,num_outputs) #define the neural network
 train_neural_net(net,training_cycles) #train the neural network
 test_neural_net(net) #test the neural network with the two test examples (the blue signal line is the clockwise test example and the orange signal line is the anticlockwise test example)
-!rm -rf helloml
+#!rm -rf helloml

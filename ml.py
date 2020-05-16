@@ -1,7 +1,5 @@
-
 import csv
 import matplotlib.pyplot as plt
-from google.colab import files
 import pandas as pd
 import numpy as np
 import math
@@ -12,9 +10,7 @@ register_matplotlib_converters()
 import tensorflow as tf
 from keras import layers
 from keras import utils
-# from cloudspindle import mekit-ml-hm (hm - hello motion)
 
-# create the input, output and test sets
 input_set_size=100
 test_set_size=2
 num_samples=200               # 200 samples are in the motion examples
@@ -24,6 +20,8 @@ num_inputs=num_samples        # we make the number of neural inputs equal to the
 num_hidden=512
 num_outputs=2
 training_cycles=100
+
+gfig, gaxis = plt.subplots(5,figsize=(30,15))  
 
 def init():
   global input_set,output_set,test_set
@@ -45,36 +43,26 @@ def load_data():
   global input_set,output_set,test_set
   
   url = "https://raw.githubusercontent.com/Cloudspindle/helloml/master/ClockwiseZero_accel.200.csv"
-  # load clockwise gesture ClockwiseZero_accel.200.csv as first training example
 
-  #uploaded = files.upload()
-  #filename=next(iter(uploaded))
   headers = ['ts', 'x', 'y', 'z','m'] 
-#  data=pd.read_csv(filename,sep=',',names=headers,header=None,parse_dates=True,index_col=0,infer_datetime_format=True )
   data=pd.read_csv(url,sep=',',names=headers,header=None,parse_dates=True,index_col=0,infer_datetime_format=True )
   
   url =  "https://raw.githubusercontent.com/Cloudspindle/helloml/master/AntiClockwiseZero_accel.200.csv"
   # load the anticlockwise gesture AntiClockwiseZero_accel.200.csv as the second training example
-  #uploaded = files.upload()
-  #filename=next(iter(uploaded))
-  #anti_data=pd.read_csv(filename,sep=',',names=headers,header=None,parse_dates=True,index_col=0,infer_datetime_format=True )
+  
   anti_data=pd.read_csv(url,sep=',',names=headers,header=None,parse_dates=True,index_col=0,infer_datetime_format=True )
   anti_clock_y=anti_data.y.to_numpy()
   clock_y=data.y.to_numpy()
 
   url = "https://raw.githubusercontent.com/Cloudspindle/helloml/master/ChloeClockwise_accel.200.csv"
   # upload the data from the file ChloeClockwise_accel.200.csv - real test data
-  # uploaded = files.upload()
-  # filename=next(iter(uploaded))
-  #test_clock_data=pd.read_csv(filename,sep=',',names=headers,header=None,parse_dates=True,index_col=0,infer_datetime_format=True )
+  
   test_clock_data=pd.read_csv(url,sep=',',names=headers,header=None,parse_dates=True,index_col=0,infer_datetime_format=True )
   test_clock_y=test_clock_data.y.to_numpy()
 
   url = "https://raw.githubusercontent.com/Cloudspindle/helloml/master/ChloeAntiClock_accel.200.csv"
   # upload the dat from the file ChloeAntiClock_accel.200.csv file - real test data
-  # uploaded = files.upload()
-  # filename=next(iter(uploaded))
-  # test_anti_clock_data=pd.read_csv(filename,sep=',',names=headers,header=None,parse_dates=True,index_col=0,infer_datetime_format=True )
+ 
   test_anti_clock_data=pd.read_csv(url,sep=',',names=headers,header=None,parse_dates=True,index_col=0,infer_datetime_format=True )
   test_anti_clock_y=test_anti_clock_data.y.to_numpy()
 
@@ -109,10 +97,22 @@ def show_input_example():
   random_selection=round(random.uniform(0, input_set_size))
   print(random_selection)
   print(random_selection%2)
-  plt.figure(figsize=(10,5))
-  plt.plot(input_set[random_selection])
-  plt.plot(test_set[random_selection%2])
-  plt.show()
+  # fig=plt.figure("Input Dataset",figsize=(10,5))
+  gaxis[0].plot(input_set[random_selection],color='red',label="Clockwise")
+  gaxis[0].set_title("Training Clockwise")
+  gaxis[0].set_ylabel('Acceleration Magniture Gs', fontsize=18)
+  gaxis[0].set_xlabel('Sample #', fontsize=18)
+
+  gaxis[1].plot(test_set[random_selection%2],color='blue',label="Anti Clockwise")
+  gaxis[1].set_title("Training Anti Clockwise")
+
+  # fig.suptitle('Input  Dataset', fontsize=22)
+  gaxis[1].set_xlabel('Sample #', fontsize=18)
+  gaxis[1].set_ylabel('Acceleration Magniture Gs', fontsize=18)
+  # plt.legend()
+  # mng = plt.get_current_fig_manager()
+  # mng.window.showMaximized()
+  # plt.show()
 
 def define_neural_net(num_inputs,num_hidden_nodes,num_outputs):
   global input_set,output_set,test_set
@@ -130,15 +130,44 @@ def train_neural_net(net,training_cycles):
   log=net.fit(input_set, output_set, epochs=training_cycles)
   loss = log.history['loss']
   epochs = range(1,len(loss)+1)
-  plt.plot(epochs,loss,'g.',label='Training loss')
+  # fig=plt.figure('Training',figsize=(10,5))
+  gaxis[2].set_xlabel('Epoch', fontsize=18)
+  gaxis[2].set_ylabel('Loss', fontsize=18)
+
+  gaxis[2].plot(epochs,loss,'g.',label='Training loss')
+  gaxis[2].set_title("Training loss")
+
+  # plt.legend()
+  # mng = plt.get_current_fig_manager()
+  # mng.window.showMaximized()
+  # plt.show()
 
 def test_neural_net(net):
   global input_set,output_set,test_set
-  plt.figure(figsize=(10,5))
-  plt.plot(test_set[0])
-  plt.plot(test_set[1])
-  plt.show()
-  predictions=net.predict(test_set,batch_size=10,verbose=10)
+  # fig=plt.figure('Test Data',figsize=(10,5))
+  gaxis[3].plot(test_set[0],color='red',label="Clockwise")
+  gaxis[3].set_title("Test Data ")
+  gaxis[3].text(0.5, 0.2, 'Classified as Clockwise', size=30,color='red', 
+        bbox=dict(facecolor='none', edgecolor='black', boxstyle='square',       ec=(1., 0.5, 0.5),
+                   fc=(1., 0.8, 0.8)))
+  gaxis[4].set_xlabel('Sample #', fontsize=18)
+  gaxis[4].set_ylabel('Acceleration Magniture Gs', fontsize=18)
+  # plt.legend()
+
+  gaxis[4].plot(test_set[1],color='blue',label="Anti clockwise")
+  gaxis[4].text(0.5, 0.2, 'Classified as Anti Clockwise',size=30, color='blue', 
+        bbox=dict(facecolor='none', edgecolor='black', boxstyle='square',       ec=(1., 0.5, 0.5),
+                   fc=(1., 0.8, 0.8)))
+
+  gaxis[4].set_title("Test Data ")
+  # fig.suptitle('Test Data', fontsize=22)
+  gaxis[3].set_xlabel('Sample #', fontsize=18)
+  gaxis[3].set_ylabel('Acceleration Magniture Gs', fontsize=18)
+  # plt.legend()
+  # mng = plt.get_current_fig_manager()
+  # mng.window.showMaximized()
+  # plt.show()
+  # predictions=net.predict(test_set,batch_size=10,verbose=10)
   #print(predictions)
   rounded_predictions=net.predict_classes(test_set,batch_size=10,verbose=10)
   #print(rounded_predictions)
@@ -146,7 +175,11 @@ def test_neural_net(net):
   while i < rounded_predictions.size:
     if rounded_predictions[i] == 1:
       print("clockwise")
+   
     else:
       print("anticlockwise")
+   
     i+=1
+  gfig.tight_layout()
+  plt.show()
 
