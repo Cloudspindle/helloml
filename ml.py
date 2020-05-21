@@ -21,7 +21,7 @@ num_hidden=512
 num_outputs=2
 training_cycles=100
 
-gfig, gaxis = plt.subplots(5,figsize=(30,15))  
+# gfig, gaxis = plt.subplots(5,figsize=(30,15))  
 
 def init():
   global input_set,output_set,test_set
@@ -38,6 +38,11 @@ def init():
   test_set=test_set.reshape(test_set_size,num_samples)
   test_set=test_set.astype('float32')
 
+def load_y(url):
+  headers = ['ts', 'x', 'y', 'z','m'] 
+  data=pd.read_csv(url,sep=',',names=headers,header=None,parse_dates=True,index_col=0,infer_datetime_format=True )
+  return data.y.to_numpy()
+  
 
 def load_data():
   global input_set,output_set,test_set
