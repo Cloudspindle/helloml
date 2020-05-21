@@ -149,12 +149,13 @@ def show_input_example():
   plt.figure("Wipe on",figsize=(10,5))
   plt.plot(input_set[random_selection])
   # plt.show(block=False)
-  
+  md = hashlib.md5(input_set[random_selection]).hexdigest()
+  print("test_set",random_selection,"(Wipe on)",md)
   plt.figure("Wipe off",figsize=(10,5))
   plt.plot(test_set[random_selection%2])
   # plt.show(block=False)
   md = hashlib.md5(test_set[random_selection%2]).hexdigest()
-  print("test_set something",md)
+  print("test_set ",random_selection%2,"(Wipe off)",md)
 
 
 def define_neural_net(num_inputs,num_hidden_nodes,num_outputs):
