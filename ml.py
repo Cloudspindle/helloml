@@ -11,7 +11,7 @@ import tensorflow as tf
 from keras import layers
 from keras import utils
 
-input_set_size=100
+training_set_size=100
 test_set_size=2
 num_samples=200               # 200 samples are in the motion examples
 
@@ -25,26 +25,41 @@ training_cycles=100
 
 def init():
   global input_set,output_set,test_set
-  global input_set_size,test_set_size,num_samples 
+  global training_set_size,test_set_size,num_samples 
 
-  input_set=np.arange(input_set_size*num_samples)
-  input_set=input_set.reshape(input_set_size,num_samples)
+  input_set=np.arange(training_set_size*num_samples)
+  input_set=input_set.reshape(training_set_size,num_samples)
   input_set=input_set.astype('float32')
 
-  output_set=np.arange(input_set_size)
+  output_set=np.arange(training_set_size)
   output_set=output_set.astype('int')
 
-  test_set=np.arange(test_set_size*num_samples)
-  test_set=test_set.reshape(test_set_size,num_samples)
+  test_set=np.arange(training_set_size*num_samples)
+  test_set=test_set.reshape(training_set_size,num_samples)
   test_set=test_set.astype('float32')
 
-def load_y(url):
+
+'''
+load_data(url,fuzz=)
+load .csv file from url (or local file)
+if fuzz, create normal random data sets based on the data from the .csv file
+
+'''
+def load_data(url,fuzz=0,fuzzsize=0):
   headers = ['ts', 'x', 'y', 'z','m'] 
-  data=pd.read_csv(url,sep=',',names=headers,header=None,parse_dates=True,index_col=0,infer_datetime_format=True )
-  return data.y.to_numpy()
+  data=pd.read_csv(url,sep=',',names=headers,header=None,parse_dates=True,index_col=0,infer_datetime_format=True ).y.to_numpy()
+
+  if fuzz != 0:
+    adata=np.arange(fuzz*num_samples)
+    adata=adata.reshape(fuzz,num_samples)
+    adata=adata.astype('float32')
+    for i in range(0,fuzz):
+      adata[i] = data+np.random.random_sample(num_samples)*fuzzsize
+    return adata
+  return data
   
 
-def load_data():
+def load_data_thing():
   global input_set,output_set,test_set
   
   url = "https://raw.githubusercontent.com/Cloudspindle/helloml/master/ClockwiseZero_accel.200.csv"
