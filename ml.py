@@ -54,62 +54,10 @@ def load_data(url,fuzz=0,fuzzsize=0):
     adata=adata.reshape(fuzz,num_samples)
     adata=adata.astype('float32')
     for i in range(0,fuzz):
-      adata[i] = data+np.random.random_sample(num_samples)*fuzzsize
+      adata[i] = data+(np.random.random_sample(num_samples)*fuzzsize-fuzzsize/2)
     return adata
   return data
-  
 
-def load_data_thing():
-  global input_set,output_set,test_set
-  
-  url = "https://raw.githubusercontent.com/Cloudspindle/helloml/master/ClockwiseZero_accel.200.csv"
-
-  headers = ['ts', 'x', 'y', 'z','m'] 
-  data=pd.read_csv(url,sep=',',names=headers,header=None,parse_dates=True,index_col=0,infer_datetime_format=True )
-  
-  url =  "https://raw.githubusercontent.com/Cloudspindle/helloml/master/AntiClockwiseZero_accel.200.csv"
-  # load the anticlockwise gesture AntiClockwiseZero_accel.200.csv as the second training example
-  
-  anti_data=pd.read_csv(url,sep=',',names=headers,header=None,parse_dates=True,index_col=0,infer_datetime_format=True )
-  anti_clock_y=anti_data.y.to_numpy()
-  clock_y=data.y.to_numpy()
-
-  url = "https://raw.githubusercontent.com/Cloudspindle/helloml/master/ChloeClockwise_accel.200.csv"
-  # upload the data from the file ChloeClockwise_accel.200.csv - real test data
-  
-  test_clock_data=pd.read_csv(url,sep=',',names=headers,header=None,parse_dates=True,index_col=0,infer_datetime_format=True )
-  test_clock_y=test_clock_data.y.to_numpy()
-
-  url = "https://raw.githubusercontent.com/Cloudspindle/helloml/master/ChloeAntiClock_accel.200.csv"
-  # upload the dat from the file ChloeAntiClock_accel.200.csv file - real test data
- 
-  test_anti_clock_data=pd.read_csv(url,sep=',',names=headers,header=None,parse_dates=True,index_col=0,infer_datetime_format=True )
-  test_anti_clock_y=test_anti_clock_data.y.to_numpy()
-
-
-  for i in range(0,input_set_size):
-    if (i%2==0):
-      # create the noisy clockwise signal
-      clock_y += 0.01*np.random.randn(*clock_y.shape)
-      input_set[i]=clock_y
-      output_set[i]=1  # 1 means it's a clockwise signal
-    else:
-      # create the noisy anticlockwise signal
-      anti_clock_y += 0.01*np.random.randn(*anti_clock_y.shape)
-      input_set[i]=anti_clock_y
-      output_set[i]=0  # zero means that it's an anticlockwise signal
-
-  # assign the test set
-  test_set[0]=test_clock_y
-  test_set[1]=test_anti_clock_y
-
-  # reshape
-  input_set=input_set.reshape(input_set.shape[0],num_samples)
-  input_set=input_set.astype('float32')
-  #input_set/=1
-  output_set=utils.to_categorical(output_set,num_outputs)
-
-  return input_set,output_set,test_set
 
 def show_input_example():
   global input_set,output_set,test_set
