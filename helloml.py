@@ -10,7 +10,7 @@
 #!git clone https://github.com/Cloudspindle/helloml.git
 import matplotlib.pyplot as plt
 
-from ml import init,load_data,show_input_example,define_neural_net,show_input_example,define_neural_net,train_neural_net,test_neural_net
+from ml import init,load_data,define_neural_net,train_neural_net,test_neural_net
 training_set_size=100
 test_set_size=2
 num_samples=200               # 200 samples are in the motion examples
@@ -55,7 +55,6 @@ d.set_title("test_anti_clock_wise")
 d.set_ylabel("G")
 
 plt.show()
-# show_input_example() #show an example of the data (input training v test) - rerun to #randomly select and example
 
 # net=define_neural_net(num_inputs,num_hidden,num_outputs) #define the neural network
 # train_neural_net(net,training_cycles) #train the neural network
